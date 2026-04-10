@@ -42,3 +42,7 @@
                         ├── {area_code}_{area_name}_{task_id}_pre_dawn_QC.xlsx
                         ├── {area_code}_{area_name}_{task_id}_solar_noon_QC.xlsx
                         └── {area_code}_{area_name}_{task_id}_post_sunset_QC.xlsx
+
+
+
+_Develeped using https://tree.nathanfriend.com/_
