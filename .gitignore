@@ -1,0 +1,27 @@
+# Local Data Directories (Created by R script)
+/raw_rjpeg/
+/processed_tiff/
+/logs/
+/data/
+
+# Drone & Geospatial Formats
+*.jpg
+*.JPG
+*.jpeg
+*.tif
+*.tiff
+*.geojson
+*.csv
+
+# AWS & Environment Secrets
+.aws/
+.env
+/config/*.conf
+!/config/*.sample
+
+# OS & Python specific
+.DS_Store
+__pycache__/
+venv/
+.Rhistory
+.RData

@@ -1,0 +1,45 @@
+#!/bin/bash -e
+
+DIR=$(cd $(dirname "$0"); pwd)
+if [ ! $DISTANCE ]; then
+    DISTANCE=100
+fi
+if [ ! $HUMIDITY ]; then
+    HUMIDITY=80
+fi
+if [ ! $TEMPERATURE ]; then
+    TEMPERATURE=25
+fi
+
+DJI_IRP=$DIR/dji_irp
+EXIFTOOL=$DIR/exiftool
+RAW2TIFF=$DIR/raw2tiff
+export LD_LIBRARY_PATH=$DIR:$LD_LIBRARY_PATH
+
+if [ ! -d tiff ]; then
+    mkdir tiff
+fi
+for i in "$@"; do
+    base=$(basename "$i")
+    base=$(basename -s .jpg "$base")
+    base=$(basename -s .jpeg "$base")
+    base=$(basename -s .JPG "$base")
+    base=$(basename -s .JPEG "$base")
+    $DJI_IRP -s "$i" -a measure \
+        --distance $DISTANCE --humidity $HUMIDITY --emissivity 0.95 \
+        --ambient $TEMPERATURE --reflection $TEMPERATURE \
+        -o "${base}.raw"
+
+    # Get actual resolution from the image
+    res=$($EXIFTOOL -s -s -s -ImageSize "$i")
+    w=$(echo "$res" | cut -dx -f1)
+    h=$(echo "$res" | cut -dx -f2)
+
+    $RAW2TIFF -L -w "$w" -l "$h" -d short -c none -r 128 \
+        "${base}.raw" "tiff/${base}.tiff"
+
+    $EXIFTOOL -overwrite_original -TagsFromFile "$i" \
+        -all:all -xmp:xmp "tiff/${base}.tiff"
+
+    rm "${base}.raw"
+done

@@ -1,0 +1,7 @@
+cat << 'EOF' > ~/Desktop/WebODM_Maintenance.txt
+### STANDARD REFRESH (Preserves Projects)
+cd ~/WebODM && ./webodm.sh down && docker system prune -f && ./webodm.sh start
+
+### NUCLEAR WIPE (Deletes Everything/Full Reinstall)
+cd ~/WebODM && ./webodm.sh down && docker system prune -a --volumes -f && ./webodm.sh start
+EOF
